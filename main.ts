@@ -1,77 +1,104 @@
 #! /usr/bin/env node
 import inquirer from "inquirer"
-let myBalance =  20000; // Dollar
-let myPin = 2489;
+let myBalance =  0; // Dollar
+let isContinue = true;
+const pinCode = 2489;
 
+ const message = "Welcome to ATM";
+ console.log(message);
 
- let pinAnswer = await inquirer.prompt(
-  [
-    {
-        name: "pin",
-        message: "enter your pin",
-        type: "number",
-    }
-  ]
-);
+ let pin_ans = await inquirer.prompt({
+  type: "number",
+  name: "ans",
+  message: "Please enter pin code"
+ })
 
-if (pinAnswer.pin === myPin) {
-    console.log("Correct pin Code!!!");
+ if(pin_ans.ans === 2489){
+  do {
+  let ans = await inquirer.prompt({
+    type: "list",
+    name: "list",
+    message: "Select any option",
+    choices: ["Deposit", "Withdraw", "Fast cash", "Balance check"]
+  })
 
- let operationsAns = await inquirer.prompt(
-    [
-        {
-            name: "operation",
-            message: "please select option",
-            type: "list",
-            choices: ["withdraw", "fastcash", "checkbalance"],
-        }
-    ]
- );
+ //---------------------------------Deposit----------------------------------------
+ if(ans.list === "Deposit"){
+  let ans = await inquirer.prompt({
+    type: "number",
+    name: "Deposit_amount",
+    message: "Please Enter your amount"
+  })
 
-  console.log(operationsAns);
-
-  if (operationsAns.operation === "withdraw") {
-    let amountAns = await inquirer.prompt(
-    [
-        {
-           name: "amount",
-           message: "enter your amount",
-           type: "number"
-        }
-    ]
-);
-if (amountAns.amount > myBalance){
-  console.log("Insufficiant Balance")
+  if(ans.Deposit_amount > 0){
+    myBalance = myBalance + ans.Deposit_amount
+    console.log(myBalance);
+  }
 }
- // = += -=
- else { 
-    myBalance -= amountAns.amount;
 
-   console.log(`Your remaining balance is ${myBalance}`)
-   }
+//---------------------------------WithDraw----------------------------------------
+else if(ans.list === "Withdraw"){
+let ans = await inquirer.prompt({
+type: "number",
+name: "withdraw_amount",
+message: "Please enter amount"
+})
 
+if (ans.withdraw_amount <= myBalance){
+myBalance = myBalance - ans.withdraw_amount
+console.log(myBalance);
+
+}else{
+console.log("Insufficiant Balance");
  }
- else if(operationsAns.operation === "fastcash") {
-  let fast = await inquirer.prompt(
-    [
-      {
-        name: "fastcash",
-        message: "Select the amount which you withdraw",
-        type: "list",
-        choices: [5000,10000,15000,20000]
-      }
-    ]
-  );
-  myBalance -= fast.fastcash;
-  console.log(`You have successfully withdrawl ${fast.fastcash} \nYour remaining balance is ${myBalance}`)
- }
-
- else if(operationsAns.operation === "check balance"){
-  console.log(`your remaining balance is ${myBalance}`)
- }
-
- }   
-      
-     else {
-    console.log("Incorrect pin number");
 }
+
+//---------------------------------Fast cash----------------------------------------
+else if(ans.list === "Fast cash"){
+   let ans = await inquirer.prompt({
+      type: "list",
+      name: "fast_cash",
+      message: "Please select one",
+      choices: ["500", "1000", "2000", "5000"]
+})
+
+if(ans.fast_cash <= myBalance){
+  if(ans.fast_cash === "500"){
+     myBalance -= ans.fast_cash
+     console.log(myBalance);
+
+  }else if(ans.fast_cash === "1000"){
+    myBalance -= ans.fast_cash
+    console.log(myBalance);
+
+  }else if(ans.fast_cash === "2000"){
+    myBalance -= ans.fast_cash
+    console.log(myBalance);
+
+  }else if(ans.fast_cash === "5000"){
+      myBalance -= ans.fast_cash
+      console.log(myBalance);
+  }
+}
+}
+
+//---------------------------------Check balance----------------------------------------
+else if(ans.list === "Balance check"){
+    console.log(`your balance is: ${myBalance}`);
+}
+
+//---------------------------------while condition---------------------------------------
+let while_ans = await inquirer.prompt({
+type: "confirm",
+name: "condition",
+message: "Do you want to continue:"
+})
+
+if(while_ans.condition === false){
+isContinue = false
+}
+} while (isContinue);
+}
+ else {
+  console.log("Invalid pin code");
+ }

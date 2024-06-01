@@ -1,6 +1,6 @@
 {
   "name": "annie-cli-atm",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "CLI ATM made with Typescript and Node.js while using Inquirer",
   "main": "main.js",
   "type": "module",
